@@ -1,6 +1,6 @@
 async function saveToAnki(tabInit, inServiceWorker) {
   let tab;
-  console.error(`tabInit: ${tabInit}`);
+  console.debug(`tabInit: ${tabInit}`);
   // The Tab object is a JSON object, so check for the keys we need.
   if (tabInit && "url" in tabInit) {
     tab = tabInit;
@@ -29,7 +29,7 @@ async function saveToAnki(tabInit, inServiceWorker) {
   } else {
     response = await chrome.runtime.sendMessage({ action: "addNote", note });
   }
-  console.error(`sendMessage response: ${JSON.stringify(response)}`);
+  console.debug(`sendMessage response: ${JSON.stringify(response)}`);
   if (response && response.status == 200) {
     console.log("Note saved successfully!");
   } else {

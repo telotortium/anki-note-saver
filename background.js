@@ -1,7 +1,7 @@
 importScripts('save-to-anki.js');
 
 async function saveNote(message, sender, sendResponse) {
-  console.error(`message: ${JSON.stringify(message)}`);
+  console.debug(`message: ${JSON.stringify(message)}`);
   if (message.action === "addNote") {
     // First request permission. This pops up a permission dialog in the Anki
     // GUI to request permission for this page's origin to send requests to
@@ -24,7 +24,7 @@ async function saveNote(message, sender, sendResponse) {
       },
     };
 
-    console.error(`requestBody: ${JSON.stringify(requestBody)}`);
+    console.debug(`requestBody: ${JSON.stringify(requestBody)}`);
     try {
       const response = await fetch('http://localhost:8765', {
         method: 'POST',
@@ -34,7 +34,7 @@ async function saveNote(message, sender, sendResponse) {
         body: JSON.stringify(requestBody),
       });
       const msgResp = {status: response.status, body: response.text()};
-      console.error(`msgResp: ${JSON.stringify(msgResp)}`);
+      console.debug(`msgResp: ${JSON.stringify(msgResp)}`);
       sendResponse && sendResponse(msgResp);
       return msgResp;
     } catch (e) {
