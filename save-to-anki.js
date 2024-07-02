@@ -1,11 +1,11 @@
 async function saveToAnki(tabInit, inServiceWorker) {
   let tab;
-  console.debug(`tabInit: ${tabInit}`);
+  console.debug("tabInit: %o", tabInit);
   // The Tab object is a JSON object, so check for the keys we need.
   if (tabInit && "url" in tabInit) {
     tab = tabInit;
   } else {
-      console.log("before chrome.tabs.query");
+      console.debug("before chrome.tabs.query");
       [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   }
   if (tab.title === null || tab.title === undefined || tab.title === '') {
@@ -21,7 +21,7 @@ async function saveToAnki(tabInit, inServiceWorker) {
     tags: ["anki-save-note", "anki:year-delay"],
   };
 
-  console.log("before chrome.runtime.sendMessage");
+  console.debug("before chrome.runtime.sendMessage");
   const message = { action: "addNote", note };
   let response;
   if (inServiceWorker) {
@@ -29,11 +29,11 @@ async function saveToAnki(tabInit, inServiceWorker) {
   } else {
     response = await chrome.runtime.sendMessage({ action: "addNote", note });
   }
-  console.debug(`sendMessage response: ${JSON.stringify(response)}`);
+  console.debug("sendMessage response: %o", response);
   if (response && response.status == 200) {
-    console.log("Note saved successfully!");
+    console.log("Note saved successfully! url: %s, title: %s", tab.url, tab.title);
   } else {
-    console.error(`Request failed: status: ${response.status}, body: ${response.body}`);
+    console.error("Request failed: status: %o, body: %o", response.status, response.body);
   }
 }
 

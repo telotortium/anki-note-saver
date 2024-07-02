@@ -1,7 +1,7 @@
 importScripts('save-to-anki.js');
 
 async function saveNote(message, sender, sendResponse) {
-  console.debug(`message: ${JSON.stringify(message)}`);
+  console.debug("message: %o", message);
   if (message.action === "addNote") {
     // First request permission. This pops up a permission dialog in the Anki
     // GUI to request permission for this page's origin to send requests to
@@ -24,7 +24,7 @@ async function saveNote(message, sender, sendResponse) {
       },
     };
 
-    console.debug(`requestBody: ${JSON.stringify(requestBody)}`);
+    console.debug("requestBody: %o", requestBody);
     try {
       const response = await fetch('http://localhost:8765', {
         method: 'POST',
@@ -34,7 +34,7 @@ async function saveNote(message, sender, sendResponse) {
         body: JSON.stringify(requestBody),
       });
       const msgResp = {status: response.status, body: response.text()};
-      console.debug(`msgResp: ${JSON.stringify(msgResp)}`);
+      console.debug("msgResp: %o", msgResp);
       sendResponse && sendResponse(msgResp);
       return msgResp;
     } catch (e) {
@@ -53,7 +53,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 chrome.commands.onCommand.addListener((command, tab) => {
-  console.log(`command: ${command}`);
+  console.log("command: %s", command);
   if (command === "save-note") {
     (async () => {
       saveToAnki(tab, /* inServiceWorker = */ true);
